@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Lyric Shuffler 1.0</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale = 1.0">
+
+<style type="text/css"> 
+<!-- 
+
+body {
+background-color: #bbbbbb;
+}
+
+form {
+position: relative;
+padding: 5px;
+background-color: #888888;
+}
+
+label.selects {
+float: left;
+padding: 8px 0 0 8px;
+}
+
+#wrapper {
+position: absolute;
+top: 5px;
+left: 5px;
+padding: 7px;
+}
+
+#starting_text, #shuffled_text {
+float: left;
+margin: 7px;
+}
+
+#words_per_line, #lines_per_verse {
+float: left;
+margin: 7px;
+}
+
+#button_shuffle {
+margin: 5px 5px 5px 9px;
+}
+
+#calculations {
+position: relative;
+margin: 10px 0 0 3px;;
+}
+
+--> 
+</style>
+
+</head>
+
+<body>
+
+
+<div id="wrapper">
+<form>
+
+<label class="selects" for="words_per_line">Words per line:</label>
+<select id="words_per_line" name="words_per_line">
+<script language="javascript" type="text/javascript"> 
+for(var i=1;i<=12;i++) {
+if (i == 8) {
+  document.write('<option value="'+i+'" selected="selected">'+i+'</option>');
+} else {
+  document.write('<option value="'+i+'">'+i+'</option>');
+}}
+</script>
+</select>
+
+
+<label class="selects" for="lines_per_verse">Lines per verse:</label>
+<select id="lines_per_verse" name="lines_per_verse">
+<script language="javascript" type="text/javascript"> 
+for(var i=1;i<=12;i++) {
+if (i == 4) {
+  document.write('<option value="'+i+'" selected="selected">'+i+'</option>');
+} else {
+  document.write('<option value="'+i+'">'+i+'</option>');
+}}
+</script>
+</select>
+
+<div style="clear: both;"></div>
+<textarea id="starting_text" name="starting_text" cols="50" rows="20"></textarea>
+<textarea id="shuffled_text" name="shuffled_text" cols="90" rows="20"></textarea>
+<div style="clear: both;"></div>
+<button type="button" id="button_shuffle" onclick="shuffle()">Shuffle</button>
+
+</form>
+
+<div id="calculations" style="white-space: pre-wrap;"></div>
+</div>
+
+<script type="text/javascript">
+<!-- 
+
+function array_shuffle(the_array) { 
+the_array.sort(function() { return 0.5 - Math.random() }); 
+}
+
+function shuffle() {
+
+var starting_text_value = document.getElementById("starting_text").value;                // GET INPUT TEXT AREA'S VALUE
+
+var starting_string=starting_text_value.replace(/,/g,"");                                // REMOVE COMMAS SO IT DOES NOT INTERFERE WITH ARRAY DELINATION
+starting_string = starting_string.replace(/[\n\r]/g, ' ');                               // REMOVE ANY ORIGINAL CARRIAGE RETURNS OR LINE BREAKS THAT MAY BE PRESENT
+
+// REMOVE PUNCTUATION //
+starting_string = starting_string.replace(/:/g,"");
+starting_string = starting_string.replace(/!/g,"");
+starting_string = starting_string.replace(/\?/g,"");
+starting_string = starting_string.replace(/\./g,"");
+starting_string = starting_string.replace(/;/g,"");
+starting_string = starting_string.replace(/\"/g,"");
+
+// REMOVE PARENTHESES AND BRACKETS //
+starting_string = starting_string.replace(/\(/g,"");
+starting_string = starting_string.replace(/\)/g,"");
+starting_string = starting_string.replace(/\[/g,"");
+starting_string = starting_string.replace(/\]/g,"");
+
+starting_string = starting_string.toLowerCase();                                         // SET EVERYTHING TO LOWERCASE FOR BETTER READABILITY //
+starting_string = starting_string.replace(/  /g," ");                                    // REMOVE ACCIDENTAL DOUBLE SPACES AND REPLACE THEM WITH SINGLE ONES
+
+var starting_string_array=starting_string.split(" ");                             // PUT THE INPUT VALUE INTO AN ARRAY TO PRESERVE ORIGINAL INPUT
+var shuffled_array=starting_string.split(" ");                                    // PUT THE INPUT VALUE INTO ANOTHER ARRAY THAT WILL BE SHUFFLED
+
+array_shuffle(shuffled_array);                                                   // SHUFFLE THE SECOND ARRAY
+//var shuffled_output = shuffled_array.join(" ");                                  // OUTPUT SHUFFLED ARRAY TO A STRING
+
+// CRUNCH THE LENGTH NUMBERS AND OUTPUT THEM 
+
+var words_per_line_raw = document.getElementById("words_per_line").value;
+var words_per_line = parseInt(words_per_line_raw);
+var lines_per_verse_raw = document.getElementById("lines_per_verse").value;
+var lines_per_verse = parseInt(lines_per_verse_raw);
+
+var songlength = shuffled_array.length;
+var number_of_lines = songlength / words_per_line;
+var songlength_with_breaks = songlength + number_of_lines;
+
+
+var wpl_counter = 0;
+var line_counter = 1;
+var words_per_line_corrected = words_per_line + 1;
+
+for (var i = 0; i < songlength_with_breaks; i++) {
+  wpl_counter ++;
+  if (wpl_counter%words_per_line_corrected == 0 && i != 0) {
+    if (line_counter%lines_per_verse == 0) {
+      shuffled_array.splice(i,0,"\n\n");
+  } else {
+      shuffled_array.splice(i,0,"\n");
+  }
+    line_counter++;
+  }
+}
+
+document.getElementById("calculations").innerHTML= 'Length of song: ' + songlength + '<br>Words per line: ' + words_per_line + '<br>Lines per verse: ' + lines_per_verse + '<br>Number of lines: ' + Math.ceil(number_of_lines);
+var shuffled_output = shuffled_array.join(" ");                                  // OUTPUT SHUFFLED ARRAY TO A STRING
+shuffled_output = shuffled_output.replace(/\n /g, "\n");  // REMOVES THE SPACE DELINATION FOR THE NEW LINE VALUES TO PREVENT A SPACE FROM APPEARING AT THE BEGINNING OF EVERY LINE
+var newtext = document.getElementById("shuffled_text").value = shuffled_output;          // PUT THE INPUT VALUE INTO THE OUTPUT TEXTAREA
+
+}
+
+--> 
+</script>
+
+</body>
+</html>
