@@ -1,9 +1,9 @@
 lyric-shuffler
 ==============
 
-A simple html brainstorming tool for lyricists, poets or anyone having one of those creative ruts we all get into.
+A simple html word shuffling tool for lyricists, poets ad designers, or anyone in the brainstorming phase of a creative project. It shuffles and sorts input text into specified numbers of word per line, and lines per verse, or stanza.
 
-This has been kept as simple as possible, so that it is portable and easy to run. Everything is in one file, lyric_shuffler.html.
+This has been kept as simple as possible, so that it is portable and easy to run. Everything is contained in one file, lyric_shuffler.html.
 
 Below are the steps to using this tool:
 
